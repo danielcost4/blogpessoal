@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.generation.blogpessoal.model.Postagem;
 import com.generation.blogpessoal.repository.PostagemRepository;
+import com.generation.blogpessoal.repository.TemaRepository;
 
 import jakarta.validation.Valid;
 
@@ -30,6 +31,9 @@ public class PostagemController {
 
 	@Autowired
 	private PostagemRepository postagemRepository;
+	
+	@Autowired
+	private TemaRepository temaRepository;
 
 	@GetMapping
 	public ResponseEntity<List<Postagem>> getAll() {
@@ -49,7 +53,9 @@ public class PostagemController {
 
 	@PostMapping
 	public ResponseEntity<Postagem> post(@Valid @RequestBody Postagem postagem) {
+		if (temaRepository.existsById(postagem.getTema().getId()))
 		return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
+		return null;
 	}
 
 	@PutMapping
